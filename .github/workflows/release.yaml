@@ -1,0 +1,32 @@
+name: release
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+    build:
+        name: build_release
+        runs-on: ubuntu-latest 
+        steps:
+            - name: checkout
+              uses: actions/checkout@v3
+            - name: version
+              run: |
+                $version = "1.0.{0:#}" -f $($Env:GITHUB_RUN_NUMBER)
+                echo "BUILD_VERSION=$version" >> ${GITHUB_ENV}
+            - name: setup dncore
+              uses: actions/setup-dotnet@v3.0.3
+              with:
+                dotnet-version: "7.0.x"
+
+            - name: Restore
+              run: dotnet restore
+
+            - name: Build with dotnet
+              run: dotnet build --configuration Release
+
+            - name: dotnet publish
+              run: dotnet publish -c Release -o ${{ github.workspace }}/myapp -p:AssemblyVersion=${{ version }} -p:Version=${{ version }}
