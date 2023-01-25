@@ -35,4 +35,4 @@ jobs:
               run: dotnet publish -c Release -o ${{ github.workspace }}/myapp -p:AssemblyVersion=${{ env.version }} -p:Version=${{ env.version }}
 
             - name: zip
-              run: zip -r ${{ github.workspace }/assets/app.zip ${{ github.workspace }}/myapp
+              run: zip -r ${{ github.workspace }}/assets/app.zip ${{ github.workspace }}/myapp
