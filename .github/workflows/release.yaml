@@ -33,3 +33,6 @@ jobs:
 
             - name: dotnet publish
               run: dotnet publish -c Release -o ${{ github.workspace }}/myapp -p:AssemblyVersion=${{ env.version }} -p:Version=${{ env.version }}
+
+            - name: list files
+              run: ls ${{ github.workspace }}/myapp
