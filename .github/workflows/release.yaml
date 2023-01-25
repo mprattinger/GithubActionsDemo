@@ -11,8 +11,6 @@ jobs:
         name: build_release
         runs-on: ubuntu-latest 
         steps:
-            - name: checkout
-              uses: actions/checkout@v3
             - name: version
               run: |
-                echo "Run: ${{ env.GITHUB_RUN_NUMBER }"
+                echo "Run: ${{ env.GITHUB_RUN_NUMBER }}"
