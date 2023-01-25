@@ -17,3 +17,4 @@ jobs:
             - name: version
               run: |
                 echo "Run: ${{ env.GITHUB_RUN_NUMBER }}"
+                echo "Run: ${{ env.version2 }}"
