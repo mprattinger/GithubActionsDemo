@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+  version2: 1.0.${GITHUB_RUN_NUMBER}
+
 jobs:
     build:
         name: build_release
