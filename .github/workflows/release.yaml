@@ -6,11 +6,30 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+  version1: 1.0.${GITHUB_RUN_NUMBER}
+
 jobs:
     build:
         name: build_release
         runs-on: ubuntu-latest 
         steps:
             - name: version
-              run: |
-                echo "Run: ${{ env.GITHUB_RUN_NUMBER }}"
+              run: echo "Version will be ${{ env.version }}"
+            
+            - name: checkout
+              uses: actions/checkout@v3
+            
+            - name: setup dncore
+              uses: actions/setup-dotnet@v3.0.3
+              with:
+                dotnet-version: "7.0.x"
+
+            - name: Restore
+              run: dotnet restore
+
+            - name: Build with dotnet
+              run: dotnet build --configuration Release
+
+            - name: dotnet publish
+              run: dotnet publish -c Release -o ${{ github.workspace }}/myapp -p:AssemblyVersion=${{ env.version }} -p:Version=${{ env.version }}
