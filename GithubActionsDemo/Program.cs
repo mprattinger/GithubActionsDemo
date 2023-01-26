@@ -4,31 +4,79 @@ using System.Reflection;
 using System;
 
 var framework = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
-var version = GetVersion();
-Console.WriteLine($"Demo App Version {version} running with {framework}!");
+Console.WriteLine($"Demo App AssemblyVersion {GetAssemblyVersion()} running with {framework}!");
 
-static string GetVersion()
+Console.WriteLine($"Demo App FileVersion {GetFileVersion()} running with {framework}!");
+
+Console.WriteLine($"Demo App Version {GetVersion()} running with {framework}!");
+
+static string GetAssemblyVersion()
 {
-    var version = "1.0.0+LOCALBUILD";
-    var appAssembly = typeof(Program).Assembly;
-    if (appAssembly != null)
+    var versionString = "-1.0.0+LOCALBUILD";
+
+    var assembly = Assembly.GetEntryAssembly() ?? null;
+    if ( assembly != null)
     {
-        var attrs = appAssembly.GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute));
-        if (attrs != null)
+        var version = assembly.GetName().Version ?? null;
+        if ( version != null )
         {
-            var infoVerAttr = (AssemblyInformationalVersionAttribute)attrs;
-            if (infoVerAttr != null && infoVerAttr.InformationalVersion.Length > 6)
-            {
-                version = infoVerAttr.InformationalVersion;
-            }
+            versionString = version.ToString();
         }
     }
-    if (version.Contains('+'))
+    if (versionString.Contains('+'))
     {
-        return version[..version.IndexOf('+')];
+        return versionString[..versionString.IndexOf('+')];
     }
     else
     {
-        return version;
+        return versionString;
+    }
+}
+
+static string GetFileVersion()
+{
+    var versionString = "-1.0.0+LOCALBUILD";
+
+    var assembly = Assembly.GetEntryAssembly() ?? null;
+    if (assembly != null)
+    {
+        var version = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
+        if (version != null)
+        {
+            versionString = version.ToString();
+        }
+    }
+
+    if (versionString.Contains('+'))
+    {
+        return versionString[..versionString.IndexOf('+')];
+    }
+    else
+    {
+        return versionString;
+    }
+}
+
+static string GetVersion()
+{
+    var versionString = "-1.0.0+LOCALBUILD";
+
+    var assembly = Assembly.GetEntryAssembly() ?? null;
+    if (assembly != null)
+    {
+        var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        if (version != null)
+        {
+            versionString = version.ToString();
+        }
+    }
+
+    if (versionString.Contains('+'))
+    {
+        return versionString[..versionString.IndexOf('+')];
+    }
+    else
+    {
+        return versionString;
     }
 }
